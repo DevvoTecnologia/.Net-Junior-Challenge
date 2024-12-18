@@ -1,118 +1,79 @@
-# Desafio Fullstack: A Forja dos Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
+# 🛠️ Desafio Anéis do Poder - Full Stack Application
 
-## 💍 Contexto do Desafio
-
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
-
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
-
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+Esta é a conclusão do **Desafio Anéis do Poder**, uma aplicação Full Stack desenvolvida com **.NET Core e Razor Pages** no frontend e no backend e **SQLServer** como banco de dados. Este projeto é encapsulado e pode ser executado localmente com **Docker Compose**.
 
 ---
 
-## 🎯 Objetivo
+## 🚀 Funcionalidades
 
-Você irá construir:
-1. **Backend** em **.Net Core** para fornecer APIs REST.
-2. **Frontend** com **Razor Pages** para a interface do usuário.
-
----
-
-## ⚙️ Funcionalidades
-
-### Backend
-
-1. **Criar um Anel**  
-   API para registrar um novo anel com as propriedades:
-   - `Nome`: Nome do anel.
-   - `Poder`: Breve descrição do poder do anel.
-   - `Portador`: Nome do portador atual.
-   - `ForjadoPor`: Quem forjou o anel.
-   - `Imagem`: URL de uma imagem representando o anel.
-
-2. **Validações**  
-   - Máximo de 3 anéis para Elfos.
-   - Máximo de 7 anéis para Anões.
-   - Máximo de 9 anéis para Homens.
-   - Apenas 1 anel para Sauron.
-
-3. **Listar os Anéis**  
-   Retorna uma lista de todos os anéis cadastrados.
-
-4. **Atualizar um Anel**  
-   Permite modificar as propriedades de um anel existente.
-
-5. **Deletar um Anel**  
-   Remove um anel pelo seu identificador.
+1. **CRUD de Anéis**:
+   - Criação, leitura, edição e exclusão de anéis do poder.
+   - Restrições específicas para criação baseadas no "forjador".
+2. **Frontend**:
+   - Interface moderna desenvolvida com Razor Pages e BootStrap.
+   - Design responsivo e interativo.
+3. **Backend**:
+   - API REST desenvolvida com .NET Core 8.0.
+   - Documentação Swagger integrada.
+4. **Banco de Dados**:
+   - Configuração com SQL Server.
 
 ---
 
+## 📦 Estrutura do Projeto
+
+```plaintext
+.
+├── Backend/                  # Backend da aplicação
+│   ├── Backend.sln           # Solução .NET
+│   ├── Backend.csproj        # Projeto .NET
+│   ├── Dockerfile            # Dockerfile do backend
+│   ├── Controllers/          # Lógica de APIs
+│   ├── Models/               # Modelos de dados
+│   ├── Data/                 # Configuração do banco de dados
+│   └── Program.cs            # Configuração inicial do projeto
+│
+├── Frontend/                 # Frontend da aplicação
+│   ├── Dockerfile            # Dockerfile do frontend
+│   ├── Pages/                # Páginas Razor
+│   └── Program.cs            # Configuração inicial do frontend
+│
+└── docker-compose.yml        # Orquestração dos containers
+
+```
+## 🖥️ Tecnologias Utilizadas
 ### Frontend
+- Razor Pages
+- Bootstrap
+### Backend
+- .NET CORE 8.0
+- Swagger
+### Banco de Dados
+- SQL SERVER
+### Containerização
+- Docker
+- Docker-compose
+## 🖥️ Pré-requisitos
+1. Instalar o Docker e Docker Compose
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+2. Clone o Repositório
+```plaintext
+git clone https://github.com/Alvarezpro87/Desafio-aneis-do-Poder.git
+```
+## 🛠️ Como Executar o Projeto Localmente
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+1. Subir os containers
 
----
+```plaintext
+docker-compose up -d --build
 
-## 🚀 Tecnologias Recomendadas
+```
+2. Acessar os serviços
 
-- **Backend**:
-  - **.Net Core 6+**
-  - **Entity Framework** (para acesso ao banco de dados)
-  - **SQL Server** ou **MongoDb** (para banco de dados)
+- Frontend: http://localhost:8082
+- Backend (API): http://localhost:8081/api/Aneis
 
-- **Frontend**:
-  - **Razor Pages** para construção de interfaces dinâmicas.
-  - **Bootstrap** (ou outra biblioteca CSS) para estilização.
-
----
-
-## 🛠️ Instruções
-
-1. **Configuração do Backend**:
-   - Crie um projeto **.Net Core** para API.
-   - Configure o Entity Framework e migrações para gerenciar o banco de dados.
-   - Crie os endpoints para gerenciar os anéis.
-
-2. **Configuração do Frontend**:
-   - Crie um projeto com **Razor Pages**.
-   - Implemente a comunicação com a API.
-   - Configure o layout e navegação entre as telas.
-
-3. **Execução**:
-   - Configure o banco de dados.
-   - Execute o backend e frontend simultaneamente.
-   - Acesse o sistema pelo navegador.
-
----
-
-## 📝 Critérios de Avaliação
-
-1. **Código Limpo e Bem Estruturado**.
-2. **Funcionalidades Completas** (CRUD).
-3. **Validação das Regras de Negócio**.
-4. **Interface Intuitiva e Responsiva**.
-
-Boa sorte, aventureiro! Que o poder esteja com você!
+## 🧪 Testes
+1. Teste manual de criação, edição e remoção de anéis.
+2. Teste de conectividade entre os containers usando docker-compose.
+   

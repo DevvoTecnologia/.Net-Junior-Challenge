@@ -1,0 +1,154 @@
+@page
+@model Frontend.Pages.CreateModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Criar Novo Anel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #1f1f1f;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav, footer {
+            background-color: #000;
+        }
+
+        h1 {
+            color: #f0ad4e;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: white;
+            margin: 0 15px;
+            font-size: 1.8rem;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        footer a:hover {
+            transform: scale(1.2);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #2c2c2c;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-control {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .btn-primary {
+            background-color: #f0ad4e;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-primary:hover {
+            background-color: #d98c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/Index">Gerenciador de Anéis</a>
+            <a class="btn btn-warning" href="/Index">Voltar</a>
+        </div>
+    </nav>
+
+    <!-- Formulário de Criação -->
+    <div class="form-container">
+        <h1>Criar Novo Anel</h1>
+        <form method="post">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" asp-for="Anel.Nome" placeholder="Nome do anel" required />
+            </div>
+            <div class="mb-3">
+                <label for="poder" class="form-label">Poder</label>
+                <input type="text" class="form-control" id="poder" asp-for="Anel.Poder" placeholder="Ex: Controlar fogo" required />
+            </div>
+            <div class="mb-3">
+                <label for="portador" class="form-label">Portador</label>
+                <input type="text" class="form-control" id="portador" asp-for="Anel.Portador" placeholder="Ex: Gandalf" required />
+            </div>
+            <div class="mb-3">
+                <label for="forjadoPor" class="form-label">Forjado Por</label>
+                <select class="form-select" id="forjadoPor" asp-for="Anel.ForjadoPor" required>
+                    <option value="" selected disabled>Selecione</option>
+                    <option value="Elfos">Elfos</option>
+                    <option value="Anões">Anões</option>
+                    <option value="Homens">Homens</option>
+                    <option value="Sauron">Sauron</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem (URL)</label>
+                <input type="text" class="form-control" id="imagem" asp-for="Anel.Imagem" placeholder="Link da imagem" />
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Criar</button>
+                <a class="btn btn-secondary" href="/Index">Cancelar</a>
+            </div>
+
+            @if (!ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-3">
+                    @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+        </form>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <a href="https://wa.me/5561982992727" class="text-success" target="_blank" aria-label="WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+        <a href="https://github.com/Alvarezpro87" target="_blank" aria-label="GitHub">
+            <i class="bi bi-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/alvarez87/" class="text-primary" target="_blank" aria-label="LinkedIn">
+            <i class="bi bi-linkedin"></i>
+        </a>
+    </footer>
+</body>
+</html>
