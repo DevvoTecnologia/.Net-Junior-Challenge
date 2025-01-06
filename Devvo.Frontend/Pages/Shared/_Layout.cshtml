@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Devvo.Frontend</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/flowbite/2.5.2/dist/flowbite.min.css" asp-append-version="true" />
+</head>
+<body class="h-screen bg-white flex flex-col justify-center">
+    <header>
+    </header>
+    <main class="mx-4 mt-4 h-full">
+        <div class="h-full flex flex-col items-center justify-evenly">
+            @RenderBody()
+        </div>
+    </main>
+    <script type="text/javascript" src="~/lib/tailwind/3.4.16/dist/tailwind.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/lib/flowbite/2.5.2/dist/flowbite.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

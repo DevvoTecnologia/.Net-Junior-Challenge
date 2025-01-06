@@ -1,0 +1,254 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "A Forja dos Anéis de Poder";
+}
+<h1 class="text-4xl text-center">@ViewData["Title"]</h1>
+@if (@Model.Aneis.Count() > 0)
+{
+    <!-- Carousel -->
+    <div id="default-carousel" class="relative w-full md:w-1/2 h-[80%]" data-carousel="slide">
+        <!-- Carousel wrapper -->
+        <div class="relative h-full overflow-hidden rounded-lg">
+            @foreach (var item in @Model.Aneis.Select((value, i) => (value, i)))
+            {
+                <div class="h-full flex flex-col justify-center hidden duration-300 ease-in-out" data-carousel-item>
+                    <div class="h-auto m-auto max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+                        <div class="w-full flex flex-col items-center gap-y-6">
+                            <h2 class="uppercase text-xl font-bold">@item.value.Nome</h2>
+                            <img src="@item.value.Imagem" class="w-full rounded-lg">
+                            <div class="w-full flex flex-col gap-y-1">
+                                <span class="text-sm uppercase text-black/30">Poder</span>
+                                <span class="text-xl">@item.value.Poder</span>
+                            </div>
+                            <div class="w-full flex flex-col gap-y-1">
+                                <span class="text-sm uppercase text-black/30">Portador</span>
+                                <span class="text-xl">@item.value.Portador</span>
+                            </div>
+                            <div class="w-full flex flex-col gap-y-1">
+                                <span class="text-sm uppercase text-black/30">Forjado Por</span>
+                                <span class="text-xl">@item.value.ForjadoPor</span>
+                            </div>
+                            <div class="w-full flex flex-col gap-y-2">
+                                <span class="text-sm uppercase text-black/30">Ações</span>
+                                <div class="flex flex-row">
+                                    <button type="button" data-role="btn-editar" data-anel-id="@item.value.Id" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Editar</button>
+                                    <button type="button" data-role="btn-excluir" data-anel-id="@item.value.Id" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Excluir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- Slider controls -->
+        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-300/30 group-hover:bg-gray-300/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+                <span class="sr-only">Anterior</span>
+            </span>
+        </button>
+        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-300/30 group-hover:bg-gray-300/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <span class="sr-only">Próximo</span>
+            </span>
+        </button>
+    </div>
+}
+else
+{
+    <div class="text-gray-300 flex flex-col items-center gap-y-4 text-center">
+        <span class="text-4xl">Nenhum anel para ser exibido</span>
+        <span class="text-xl">Adicione um anel para começar</span>
+    </div>
+}
+<button id="btn-add" data-role="btn-adicionar" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Adicionar</button>
+<!-- Main modal -->
+<div id="add-edit-anel-modal" data-modal-target="add-edit-anel-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Adicionar/Editar anel
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="add-edit-anel-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Fechar</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form id="anel-form">
+                <div class="p-4 md:p-5 space-y-4">
+                    <input type="hidden" id="id" value=""/>
+                    <div class="mb-6">
+                        <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
+                        <input type="text" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do anel" required />
+                    </div>
+                    <div class="mb-6">
+                        <label for="poder" class="block mb-2 text-sm font-medium text-gray-900">Poder</label>
+                        <input type="text" id="poder" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Descrição do poder do anel" required />
+                    </div>
+                    <div class="mb-6">
+                        <label for="portador" class="block mb-2 text-sm font-medium text-gray-900">Portador</label>
+                        <input type="text" id="portador" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do portador" required />
+                    </div>
+                    <div class="mb-6">
+                        <label for="forjado_por" class="block mb-2 text-sm font-medium text-gray-900">Forjado Por</label>
+                        <input type="text" id="forjado_por" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Quem forjou o anel" required />
+                    </div>
+                    <fieldset>
+                        <legend class="sr-only">Imagem</legend>
+                        <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
+                        <ol class="flex flex-col gap-y-2">
+                            @foreach (var index in Enumerable.Range(1, 3))
+                            {
+                                <li class="flex items-center mb-4 gap-x-4">
+                                    <input id="imagem-@index" type="radio" name="imagem" value="/images/one_ring_@(index).png" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300">
+                                    <img src="/images/one_ring_@(index).png" class="h-8">
+                                </li>
+                            }
+                        </ol>
+                    </fieldset>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                    <button type="button" data-role="btn-salvar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Salvar</button>
+                    <button data-modal-hide="add-edit-anel-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Popup modal -->
+<div id="popup-modal" data-modal-target="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow">
+            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">Fechar</span>
+            </button>
+            <div class="p-4 md:p-5 text-center">
+                <svg class="mx-auto mb-4 text-red-600 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+                <h3 id="popup-message" class="mb-5 text-lg font-normal text-gray-500"></h3>
+                <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm uppercase font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            const modal = new Modal(document.getElementById("add-edit-anel-modal"));
+            const popup = new Modal(document.getElementById("popup-modal"));
+            const show_popup_message = (message) => {
+                $("#popup-message").text(message);
+                popup.show();
+            };
+
+            $("[data-modal-hide]").on("click", () => {
+                modal.hide();
+            });
+
+            $("[data-role='btn-editar']").on("click", async (e) => {
+                const anelId = $(e.target).data("anel-id");
+                const response = await fetch(`?id=${anelId}&handler=FindById`);
+                const anelDto = await response.json();
+
+                $("#id").val(anelDto["id"]);
+                $("#nome").val(anelDto["nome"]);
+                $("#poder").val(anelDto["poder"]);
+                $("#portador").val(anelDto["portador"]);
+                $("#forjado_por").val(anelDto["forjadoPor"]);
+                const imagem_radio = $(`input[value='${anelDto["imagem"]}']`);
+                if (imagem_radio.length)
+                {
+                    imagem_radio.prop("checked", true);
+                }
+                modal.show();
+            });
+
+            $("[data-role='btn-adicionar']").on("click", async (e) => {
+                // Limpa os dados do formulário
+                $("#id").val("");
+                $("#nome").val("");
+                $("#poder").val("");
+                $("#portador").val("");
+                $("#forjado_por").val("");
+
+                modal.show();
+            });
+
+            $("[data-role='btn-salvar']").on("click", async (e) => {
+
+                const is_add = $("#id").val().trim() == "" ? true : false
+                const anelDto = {
+                    Id: is_add ? undefined : $("#id").val() ,
+                    Nome: $("#nome").val(),
+                    Poder: $("#poder").val(),
+                    Portador: $("#portador").val(),
+                    ForjadoPor: $("#forjado_por").val(),
+                    Imagem: $("input[name=imagem]:checked").val()
+                };
+                
+                // Id vazio, adicionar anel (POST) / Id preenchido, atualizar anel (PUT)
+                var method = is_add ? "POST" : "PUT";
+                var handler = is_add ? "Add" : "Update"
+
+                const response = await fetch(`?handler=${handler}`, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(anelDto)
+                });
+
+                if (response.ok)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    // Ocorreu um erro ao salvar as alterações
+                    const responseError = await response.json();
+                    show_popup_message(`Ocorreu um erro: ${responseError["errorMessage"]}`);
+                    console.error(responseError);
+                }
+            });
+
+            $("[data-role='btn-excluir']").on("click", async (e) => {
+                
+                const anelId = $(e.target).data("anel-id");
+                const response = await fetch(`?handler=RemoveById&id=${anelId}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    // Ocorreu um erro ao salvar as alterações
+                    const responseError = await response.json();
+                    show_popup_message(`Ocorreu um erro: ${responseError["errorMessage"]}`);
+                    console.error(responseError);
+                }
+            });
+        });
+    </script>
+}

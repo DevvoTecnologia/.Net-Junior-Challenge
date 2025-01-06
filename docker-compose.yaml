@@ -1,0 +1,63 @@
+version: "3.4"
+services:
+  database:
+    container_name: "devvo_database"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "29f@0T673e0480949b1d4d44X69f005C1c9744d5c3fB00bf3d4afK71"
+    networks:
+      - "devvo_network"
+    expose:
+      - "1433"
+    ports:
+      - "1433:1433"
+  backend:
+    container_name: "devvo_backend"
+    image: "mcr.microsoft.com/dotnet/sdk:8.0"
+    environment:
+      ASPNETCORE_URLS: "http://*:5188"
+      CONNECTION_STRING: "Server=devvo_database,1433;Database=devvo_db;User ID=sa;Password=29f@0T673e0480949b1d4d44X69f005C1c9744d5c3fB00bf3d4afK71;Trusted_Connection=False; TrustServerCertificate=True;"
+    networks:
+      - "devvo_network"
+    expose:
+      - "5188"
+    ports:
+      - "5188:5188"
+    volumes:
+      - ./Devvo.Common:/Devvo.Common
+      - ./Devvo.Backend:/Devvo.Backend
+    working_dir: /Devvo.Backend
+    command: >
+      bash -c "dotnet restore
+      && dotnet tool restore
+      && dotnet dotnet-ef migrations remove || true
+      && dotnet dotnet-ef migrations add InitialCreate
+      && dotnet dotnet-ef database update
+      && dotnet run"
+    depends_on:
+      - "database"
+  frontend:
+    container_name: "devvo_frontend"
+    image: "mcr.microsoft.com/dotnet/sdk:8.0"
+    environment:
+      ASPNETCORE_URLS: "http://*:5161"
+      API_URL: "http://devvo_backend:5188/api/"
+    networks:
+      - "devvo_network"
+    expose:
+      - "5161"
+    ports:
+      - "5161:5161"
+    volumes:
+      - ./Devvo.Common:/Devvo.Common
+      - ./Devvo.Frontend:/Devvo.Frontend
+    working_dir: /Devvo.Frontend
+    command: >
+      bash -c "dotnet restore
+      && dotnet run"
+    depends_on:
+      - "backend"
+networks:
+  devvo_network:
+    driver: "bridge"
